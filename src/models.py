@@ -10,6 +10,26 @@ class User(db.Model):
     email = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(100), nullable=False)
 
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "username": self.username,
+            "email": self.email,
+            "password": self.password
+        }
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit(self)
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
 class Character(db.Model):
     __tablename__ = 'Character'
     id = db.Column(db.Integer, primary_key=True)

@@ -14,3 +14,8 @@ flask-sqlalchemy = "*"
 python_version = "3.8"
 
 [scripts]
+#setup_app = "export Flask_APP=src/app.py"  # mac y linux
+setup_app = "set FLASK_APP=src/app.py"  
+init = "flask db init" # migrations
+migrate = "flask db migrate" # models.py to migrate 
+upgrade = "flask db upgrade" 

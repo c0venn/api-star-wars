@@ -10,7 +10,7 @@ class User(db.Model):
     email = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(100), nullable=False)
 
-class Characters(db.Model):
+class Character(db.Model):
     __tablename__ = 'Character'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
@@ -38,7 +38,7 @@ class Characters(db.Model):
         }
     
 
-class Species(db.Model):
+class Specie(db.Model):
     __tablename__ = 'Species'
     id = db.Column(db.Integer, primary_key=True)
     classification = db.Column(db.String(50))
@@ -90,12 +90,12 @@ class Planet(db.Model):
             "surface_water": self.surface_water
         }
 
-class Starships(db.Model):
+class Starship(db.Model):
     __tablename__ = 'Starships'
-    id = db.Column(db.integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     model = db.Column(db.String(100))
-    starship_class = db.Column(db.string(100))
+    starship_class = db.Column(db.String(100))
     cost_in_credits = db.Column(db.String(100))
     length = db.Column(db.Integer)
     passengers = db.Column(db.Integer)

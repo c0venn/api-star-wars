@@ -2,74 +2,116 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 
-Base = declarative_base()
-
-class User(Base):
+class User(db.Model):
     __tablename__ = 'User'
-    id = Column(Integer, primary_key=True)
-    name = Column(String(100), nullable=False)
-    username = Column(String(100))
-    email = Column(String(100), nullable=False)
-    password = Column(String(100), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    username = db.Column(db.String(100))
+    email = db.Column(db.String(100), nullable=False)
+    password = db.Column(db.String(100), nullable=False)
 
-class Characters(Base):
+class Characters(db.Model):
     __tablename__ = 'Character'
-    id = Column(Integer, primary_key=True)
-    name = Column(String(50), nullable=False)
-    gender = Column(String(10))
-    birth_year = Column(20)
-    height = Column(String(10))
-    mass = Column(String(10))
-    hair_color = Column(String(30))
-    eye_color = Column(String(30))
-    specie = Column(String(50), ForeignKey('species.id'))
-    homeworld = Column(Integer, ForeignKey('planet.id'))
-    species= relationship(Species)
-    planet = relationship(Planet)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    gender = db.Column(db.String(10))
+    birth_year = db.Column(db.Integer)
+    height = db.Column(db.String(10))
+    mass = db.Column(db.String(10))
+    hair_color = db.Column(db.String(30))
+    eye_color = db.Column(db.String(30))
+    specie = db.Column(db.String(50), db.ForeignKey('species.id'))
+    homeworld = db.Column(db.Integer, db.ForeignKey('planet.id'))
 
-class Species(Base):
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "gender": self.gender,
+            "birth_year": self.birth_year,
+            "height": self.height,
+            "mass": self.mass,
+            "hair_color": self.hair_color,
+            "eye_color": self.eye_color,
+            "specie": self.specie,
+            "homeworld": self.homeworld
+        }
+    
+
+class Species(db.Model):
     __tablename__ = 'Species'
-    id = Column(Integer, primary_key=True)
-    classification = Column(String(50))
-    designation = Column(String(50))
-    average_lifespan = Column(Integer)
-    hair_colors = Column(String(20))
-    skin_colors = Column(String(20))
-    homeworld = Column(String(50))
-    language = Column(string(50))
+    id = db.Column(db.Integer, primary_key=True)
+    classification = db.Column(db.String(50))
+    designation = db.Column(db.String(50))
+    average_lifespan = db.Column(db.Integer)
+    hair_colors = db.Column(db.String(20))
+    skin_colors = db.Column(db.String(20))
+    homeworld = db.Column(db.String(50))
+    language = db.Column(db.String(50))
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "classification": self.classification,
+            "designation": self.designation,
+            "average_lifespan": self.average_lifespan,
+            "hair_colors": self.hair_colors,
+            "skin_colors": self.skin_colors,
+            "homeworld": self.homeworld,
+            "language": self.language
+        }
 
 
-class Planet(Base):
+
+class Planet(db.Model):
     __tablename__ = 'Planet'
-    id = Column(Integer, primary_key=True)
-    name = Column(String(50), nullable=False)
-    diameter = Column(Integer)
-    rotation_period = Column(Integer)
-    orbital_period = Column(Integer)
-    gravity = Column(String(50))
-    population = Column(Integer)
-    climate = Column(String(50))
-    terrain = Column(String(50))
-    surface_water = Column(Integer)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    diameter = db.Column(db.Integer)
+    rotation_period = db.Column(db.Integer)
+    orbital_period = db.Column(db.Integer)
+    gravity = db.Column(db.String(50))
+    population = db.Column(db.Integer)
+    climate = db.Column(db.String(50))
+    terrain = db.Column(db.String(50))
+    surface_water = db.Column(db.Integer)
 
-class Starships(Base):
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "diameter": self.diameter,
+            "rotation_period": self.rotation_period,
+            "orbital_period": self.orbital_period,
+            "gravity": self.gravity,
+            "population": self.population,
+            "climate": self.climate,
+            "terrain": self.terrain,
+            "surface_water": self.surface_water
+        }
+
+class Starships(db.Model):
     __tablename__ = 'Starships'
-    id = Column(integer, primary_key=True)
-    name = Column(String(50), nullable=False)
-    model = Column(String(100))
-    starship_class = Column(string(100))
-    cost_in_credits = Column(String(100))
-    length = Column(Integer)
-    passengers = Column(Integer)
-    max_atmosphering_speed = Column(Integer)
-    cargo_capacity = Column(Integer)
+    id = db.Column(db.integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    model = db.Column(db.String(100))
+    starship_class = db.Column(db.string(100))
+    cost_in_credits = db.Column(db.String(100))
+    length = db.Column(db.Integer)
+    passengers = db.Column(db.Integer)
+    max_atmosphering_speed = db.Column(db.Integer)
+    cargo_capacity = db.Column(db.Integer)
 
-class Favorites(Base):
-    __tablename__ = 'Favorite'
-    id = Column(Integer, primary_key=True)
-    id_user = Column(Integer, ForeignKey('user.id'))
-    name = Column(String(100), nullable=False)
-    user = relationship(User)
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "model": self.model,
+            "starship_class": self.starship_class,
+            "cost_in_credits": self.cost_in_credits,
+            "length": self.length,
+            "passengers": self.passengers,
+            "max_atmosphering_speed": self.max_atmosphering_speed,
+            "cargo_capacity": self.cargo_capacity
+        }
 
-## Draw from SQLAlchemy base
-render_er(Base, 'diagram.png')

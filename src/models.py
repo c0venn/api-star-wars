@@ -40,8 +40,8 @@ class Character(db.Model):
     mass = db.Column(db.String(10))
     hair_color = db.Column(db.String(30))
     eye_color = db.Column(db.String(30))
-    specie = db.Column(db.String(50), db.ForeignKey('species.id'))
-    homeworld = db.Column(db.Integer, db.ForeignKey('planet.id'))
+    specie = db.Column(db.String(50), db.ForeignKey('specie.id'), primary_key=True)
+    homeworld = db.Column(db.Integer, db.ForeignKey('planet.id'), primary_key=True)
 
     def serialize(self):
         return {
@@ -56,6 +56,17 @@ class Character(db.Model):
             "specie": self.specie,
             "homeworld": self.homeworld
         }
+
+     def save(self):
+        db.session.add(self)
+        db.session.commit(self)
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
     
 
 class Specie(db.Model):
@@ -66,8 +77,10 @@ class Specie(db.Model):
     average_lifespan = db.Column(db.Integer)
     hair_colors = db.Column(db.String(20))
     skin_colors = db.Column(db.String(20))
-    homeworld = db.Column(db.String(50))
+    homeworld = db.Column(db.String(50), db.ForeignKey('planet.id'), primary_key=True)
     language = db.Column(db.String(50))
+    character = db.relationship('character', backref='character', uselist=False)
+
 
     def serialize(self):
         return {
@@ -78,8 +91,20 @@ class Specie(db.Model):
             "hair_colors": self.hair_colors,
             "skin_colors": self.skin_colors,
             "homeworld": self.homeworld,
-            "language": self.language
+            "language": self.language,
+            "character": self.character.serialize()
         }
+
+     def save(self):
+        db.session.add(self)
+        db.session.commit(self)
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
 
 
 
@@ -95,6 +120,7 @@ class Planet(db.Model):
     climate = db.Column(db.String(50))
     terrain = db.Column(db.String(50))
     surface_water = db.Column(db.Integer)
+    homeworld = db.relationship('homeworld', backref='homeworld', uselist=False)
 
     def serialize(self):
         return {
@@ -109,6 +135,17 @@ class Planet(db.Model):
             "terrain": self.terrain,
             "surface_water": self.surface_water
         }
+
+     def save(self):
+        db.session.add(self)
+        db.session.commit(self)
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
 
 class Starship(db.Model):
     __tablename__ = 'Starships'
@@ -134,4 +171,15 @@ class Starship(db.Model):
             "max_atmosphering_speed": self.max_atmosphering_speed,
             "cargo_capacity": self.cargo_capacity
         }
+
+     def save(self):
+        db.session.add(self)
+        db.session.commit(self)
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
 

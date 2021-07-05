@@ -102,15 +102,15 @@ def characters(id=None):
        return jsonify(characters), 200
 
     if request.method == 'POST':
-       name = request.json.get('name')
-       gender = request.json.get('gender')
-       birth_year = request.json.get('birth_year')
-       height = request.json.get('height')
-       mass = request.json.get('mass')
-       hair_color = request.json.get('hair_color')
-       eye_color = request.json.get('eye_color')
-       specie = request.json.get('specie')
-       homeworld = request.json.get('homeworld')
+       name = request.json.get('name', '')
+       gender = request.json.get('gender', '')
+       birth_year = request.json.get('birth_year', '')
+       height = request.json.get('height', '')
+       mass = request.json.get('mass', '')
+       hair_color = request.json.get('hair_color', '')
+       eye_color = request.json.get('eye_color', '')
+       specie = request.json.get('specie', '')
+       homeworld = request.json.get('homeworld', '')
 
        character = Character()
 

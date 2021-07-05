@@ -6,7 +6,7 @@ class User(db.Model):
     __tablename__ = 'User'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    username = db.Column(db.String(100))
+    username = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(100), nullable=False)
 
@@ -40,8 +40,8 @@ class Character(db.Model):
     mass = db.Column(db.String(10))
     hair_color = db.Column(db.String(30))
     eye_color = db.Column(db.String(30))
-    specie = db.Column(db.String(50), db.ForeignKey('specie.id'), primary_key=True)
-    homeworld = db.Column(db.Integer, db.ForeignKey('planet.id'), primary_key=True)
+    specie = db.Column(db.String(50), db.ForeignKey('specie.id', ondelete='CASCADE'), primary_key=True)
+    homeworld = db.Column(db.Integer, db.ForeignKey('planet.id', ondelete='CASCADE'), primary_key=True)
 
     def serialize(self):
         return {
@@ -57,7 +57,7 @@ class Character(db.Model):
             "homeworld": self.homeworld
         }
 
-     def save(self):
+    def save(self):
         db.session.add(self)
         db.session.commit(self)
 
@@ -77,9 +77,9 @@ class Specie(db.Model):
     average_lifespan = db.Column(db.Integer)
     hair_colors = db.Column(db.String(20))
     skin_colors = db.Column(db.String(20))
-    homeworld = db.Column(db.String(50), db.ForeignKey('planet.id'), primary_key=True)
+    homeworld = db.Column(db.String(50), db.ForeignKey('planet.id', ondelete='CASCADE'), primary_key=True)
     language = db.Column(db.String(50))
-    character = db.relationship('character', backref='character', uselist=False)
+    character = db.relationship('character', cascade='all, delete', backref='character', uselist=False)
 
 
     def serialize(self):
@@ -95,7 +95,7 @@ class Specie(db.Model):
             "character": self.character.serialize()
         }
 
-     def save(self):
+    def save(self):
         db.session.add(self)
         db.session.commit(self)
 
@@ -120,7 +120,7 @@ class Planet(db.Model):
     climate = db.Column(db.String(50))
     terrain = db.Column(db.String(50))
     surface_water = db.Column(db.Integer)
-    homeworld = db.relationship('homeworld', backref='homeworld', uselist=False)
+    homeworld = db.relationship('homeworld', cascade='all, delete', backref='homeworld', uselist=False)
 
     def serialize(self):
         return {
@@ -136,7 +136,7 @@ class Planet(db.Model):
             "surface_water": self.surface_water
         }
 
-     def save(self):
+    def save(self):
         db.session.add(self)
         db.session.commit(self)
 
@@ -172,7 +172,7 @@ class Starship(db.Model):
             "cargo_capacity": self.cargo_capacity
         }
 
-     def save(self):
+    def save(self):
         db.session.add(self)
         db.session.commit(self)
 

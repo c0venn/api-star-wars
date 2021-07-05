@@ -20,3 +20,4 @@ init = "flask db init" # migrations
 migrate = "flask db migrate" # models.py to migrate 
 upgrade = "flask db upgrade" 
 downgrade = "flask db downgrade"
+start = "python src/app.py"

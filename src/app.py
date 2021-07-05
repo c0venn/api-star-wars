@@ -1,7 +1,6 @@
 from flask import Flask, json, jsonify, request, render_template
 from flask_migrate import Migrate
-from models import db, Character, Specie 
-from models import Planet, Starship
+from models import db, Character, Specie, Planet, Starship
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -97,9 +96,9 @@ def characters(id=None):
             character = Character.query.get(id)
             return jsonify(character.serialize()), 200
 
-       characters = Character.query.all()
-       characters = list(map(lambda character: character.serialize(), characters))
-       return jsonify(characters), 200
+        characters = Character.query.all()
+        characters = list(map(lambda character: character.serialize(), characters))
+        return jsonify(characters), 200
 
     if request.method == 'POST':
        name = request.json.get('name', '')
@@ -124,20 +123,20 @@ def characters(id=None):
        character.specie = specie
        character.homeworld = homeworld
 
-       character.save();
+       character.save()
 
        return jsonify(character.serialize()), 201
 
     if request.method == 'PUT':
-        name = request.json.get('name')
-        gender = request.json.get('gender')
-        birth_year = request.json.get('birth_year')
-        height = request.json.get('height')
-        mass = request.json.get('mass')
-        hair_color = request.json.get('hair_color')
-        eye_color = request.json.get('eye_color')
-        specie = request.json.get('specie')
-        homeworld = request.json.get('homeworld')
+        name = request.json.get('name','')
+        gender = request.json.get('gender','')
+        birth_year = request.json.get('birth_year','')
+        height = request.json.get('height','')
+        mass = request.json.get('mass','')
+        hair_color = request.json.get('hair_color','')
+        eye_color = request.json.get('eye_color','')
+        specie = request.json.get('specie','')
+        homeworld = request.json.get('homeworld','')
 
         character = Character.query.get(id)
 
@@ -151,7 +150,17 @@ def characters(id=None):
         character.specie = specie
         character.homeworld = homeworld
 
+        character.specie.id = id 
+
+        specie = Specie.query.filter_by(character_id=id).first()
+        specie.character = character 
+
+        specie.update()
+
         character.update()
+
+        return jsonify(character.serialize()), 200
+
 
     if request.method == 'DELETE':
 

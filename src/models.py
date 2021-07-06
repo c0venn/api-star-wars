@@ -97,8 +97,9 @@ class Specie(db.Model):
             "average_lifespan": self.average_lifespan,
             "hair_colors": self.hair_colors,
             "skin_colors": self.skin_colors,
-            "homeworld": self.homeworld,
             "language": self.language,
+            "homeworld": self.homeworld,
+            "specie": self.specie,
             "character": self.character.serialize()
         }
 

@@ -17,7 +17,7 @@ db.init_app(app)
 Migrate(app, db)  # init, migrate , upgrade 
 
 
-@app.route('login', methods=['POST'])
+@app.route('/login', methods=['POST'])
 def login ():
     username = request.json.get('username', None)
     password = request.jso.get('password', None)
@@ -31,7 +31,7 @@ def login ():
 @jwt_required()
 def protected():
     current_user = get_jwt_identity()
-    return jsonify(logged_in_as= curren_user), 200
+    return jsonify(logged_in_as= current_user), 200
 
 @app.route('/api/characters', methods=['GET','POST'])
 @app.route('/api/characters/<int:id>', methods=['GET', 'PUT', 'DELETE'])
